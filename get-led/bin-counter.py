@@ -36,4 +36,3 @@ while True:
         print(num, dec2bin(num))
         time.sleep(sleep_time)
     GPIO.output(leds, dec2bin(num))
-

@@ -1,5 +1,18 @@
-import smbus
+import r2r_dac as r2r
+import math
+import time
 import RPi.GPIO as GPIO
+import smbus
+
+start = float(time.time())
+
+def get_sin_wave_amplitude(freq, t):
+    znach = math.sin(freq * 2 * math.pi * (float(time.time()) - start)) + 1
+    return znach
+
+amplitude = 3.2
+signal_frequency = 50
+sampling_frequency = 500
 
 class MCP4725:
     def __init__(self, dynamic_range, address=0x61, verbose = True):
@@ -39,8 +52,8 @@ if __name__ == "__main__":
         
         while True:
             try:
-                voltage = float(input("Введите напряжение в Вольтах: "))
-                dac.set_voltage(voltage)
+                dac.set_voltage((get_sin_wave_amplitude(signal_frequency, 4)/2) * amplitude)
+                time.sleep(1/sampling_frequency)
 
             except ValueError as msg:
                 print(f"{msg}\nВы ввели не число. Попробуйте ещё раз\n")
